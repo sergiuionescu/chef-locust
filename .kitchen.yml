@@ -1,0 +1,79 @@
+
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 12.7.2
+
+platforms:
+  - name: ubuntu-14.04
+
+suites:
+  - name: standalone_node
+    driver:
+      network:
+      #- ["forwarded_port", {guest: 80, host: 8080}]
+      - ["private_network", {ip: "192.168.222.10"}]
+      
+    run_list:
+      - recipe[locustio::_test_standalone]
+    attributes:
+      locustio:
+        
+  - name: standalone_node_s3
+    driver:
+      network:
+      - ["private_network", {ip: "192.168.222.11"}]
+      
+    run_list:
+      - recipe[locustio::_test_standalone_from_s3]
+    attributes:
+      locustio:
+        from_s3: true
+        # These keys should only have READ access to the S3 bucket!
+        s3_aws_access_key: <%= ENV['LOCUST_AWS_ACCESS_KEY'] %>
+        s3_aws_secret_access_key: <%= ENV['LOCUST_AWS_SECRET_KEY'] %>
+        s3_bucket: 'my-s3-bucket'
+        s3_file_path: 'path/to/sample_locust_script.py'
+        s3_region: 'us-east-1'
+        test_file: '_test_virtual_user.py'
+
+  - name: master_node
+    driver:
+      network:
+      - ["private_network", {ip: "192.168.222.12"}]
+      
+    run_list:
+      - recipe[locustio::_test_master]
+    attributes:
+      locustio:
+        enable_firewall: true
+      
+  - name: slave_node
+    driver:
+      network:
+      - ["private_network", {ip: "192.168.222.13"}]
+    run_list:
+      - recipe[locustio::_test_slave]
+    attributes:
+      locustio:
+        master_ip: 192.168.222.12
+        enable_firewall: true
+
+  - name: standalone_node_firewalled
+    driver:
+      network:
+      - ["private_network", {ip: "192.168.222.14"}]
+      
+    run_list:
+      - recipe[locustio::_test_standalone_firewalled]
+    attributes:
+      locustio:
+      
+      
+
+
+
+

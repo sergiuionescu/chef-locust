@@ -1,0 +1,44 @@
+
+import random
+from locust import HttpLocust, TaskSet, task, web
+from random import randint
+from urlparse import urlparse
+
+#resource.setrlimit(resource.RLIMIT_NOFILE, (999999, 999999))
+
+USER_AGENTS = [
+    "BlackBerry Torch 9860 (LocustIO)",
+    "Mozilla/5.0 (Linux; Android 4.1.1; Nexus 7 Build/JRO03D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Safari/535.19 (LocustIO)",
+    "Android 4.0.3;AppleWebKit/534.30;Build/IML74K;GT-I9220 Build/IML74K (LocustIO)",
+    "KWC-S4000/ UP.Browser/7.2.6.1.794 (GUI) MMP/2.0 (LocustIO)",
+    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html) (LocustIO)",
+    "Googlebot-Image/1.0 (LocustIO)",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0 (LocustIO)",
+    "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52 (LocustIO)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; America Online Browser 1.1; rev1.5; Windows NT 5.1; .NET CLR 1.1.4322) (LocustIO)",
+    "Mozilla/5.0 (iPad; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3 (LocustIO)",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3 (LocustIO)",
+]
+
+class UserBehavior(TaskSet):
+
+    def on_start(self):
+        """ on_start is called when a Locust start before any task is scheduled """
+        self.user_agents = USER_AGENTS
+
+    <% @params['uri_list'].each do |item| %>
+    @task(<%= item['weight'] -%>)
+    def page_<%= item['identifier'].gsub!('-','_') -%>(self):
+        self.headers = {"User-Agent":self.user_agents[random.randint(0,len(self.user_agents)-1)]}
+        self.client.headers = self.headers
+        self.client.get("<%= item['uri'] -%>")
+        
+    <% end %>
+
+class WebsiteUser(HttpLocust):
+
+    host="http://<%= @params['base_url'] %>"
+    task_set = UserBehavior
+    # Wait times in milliseconds
+    min_wait=<%= @params['min_wait_time'] %>
+    max_wait=<%= @params['min_wait_time'] %> 

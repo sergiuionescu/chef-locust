@@ -1,0 +1,20 @@
+{
+  "id": "locust-master",
+  "chef_environment": "_default",
+  "automatic": {
+    "ipaddress": "192.168.88.2",
+     "hostname": "locust-master"
+  },
+  "hostname": "locust-master",
+  "normal": {
+    "locustio": {
+      "node_type": "master",
+      "cluster_name": "default"
+    },
+    "tags": []
+  },
+  "run_list": [
+  "recipe[locustio]"
+]
+
+}

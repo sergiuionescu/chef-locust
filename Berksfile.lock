@@ -1,0 +1,38 @@
+DEPENDENCIES
+  locustio
+    path: .
+    metadata: true
+
+GRAPH
+  apt (2.6.1)
+  aws (3.3.3)
+    ohai (>= 2.1.0)
+  build-essential (2.2.3)
+  chef-sugar (3.4.0)
+  compat_resource (12.10.6)
+  firewall (2.5.2)
+    chef-sugar (>= 0.0.0)
+  locustio (1.0.3)
+    apt (~> 2.6.1)
+    aws (~> 3.3.3)
+    firewall (~> 2.5.2)
+    poise-python (~> 1.2.1)
+    runit (~> 1.5.12)
+  ohai (4.1.0)
+    compat_resource (>= 12.9.0)
+  poise (2.7.0)
+  poise-archive (1.1.2)
+    poise (~> 2.6)
+  poise-languages (1.4.0)
+    poise (~> 2.5)
+    poise-archive (~> 1.0)
+  poise-python (1.2.1)
+    poise (~> 2.0)
+    poise-languages (~> 1.2)
+  runit (1.5.18)
+    build-essential (>= 0.0.0)
+    yum (~> 3.0)
+    yum-epel (>= 0.0.0)
+  yum (3.6.1)
+  yum-epel (0.6.0)
+    yum (~> 3.0)

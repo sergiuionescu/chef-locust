@@ -1,0 +1,52 @@
+import random
+import resource
+from locust import HttpLocust, TaskSet, task, web
+from random import randint
+from urlparse import urlparse
+
+
+resource.setrlimit(resource.RLIMIT_NOFILE, (999999, 999999))
+
+USER_AGENTS = [
+    "BlackBerry Torch 9860 (LocustIO)",
+    "Mozilla/5.0 (Linux; Android 4.1.1; Nexus 7 Build/JRO03D) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Safari/535.19 (LocustIO)",
+    "Android 4.0.3;AppleWebKit/534.30;Build/IML74K;GT-I9220 Build/IML74K (LocustIO)",
+    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html) (LocustIO)",
+    "Googlebot-Image/1.0 (LocustIO)",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0 (LocustIO)",
+    "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52 (LocustIO)",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3 (LocustIO)",
+]
+
+class UserBehavior(TaskSet):
+
+    def on_start(self):
+        """ on_start is called when a Locust start before any task is scheduled """
+        self.user_agents = USER_AGENTS
+
+    @task(40)
+    def page_home(self):
+        self.headers = {"User-Agent":self.user_agents[random.randint(0,len(self.user_agents)-1)]}
+        self.client.headers = self.headers
+        self.client.get("/")
+        
+    @task(30)
+    def page_devices(self):
+        self.headers = {"User-Agent":self.user_agents[random.randint(0,len(self.user_agents)-1)]}
+        self.client.headers = self.headers
+        self.client.get("/test/authd-page/<%=@params['secret_token'] -%>")
+   
+    @task(30)
+    def page_headers(self):
+        self.headers = {"User-Agent":self.user_agents[random.randint(0,len(self.user_agents)-1)]}
+        self.client.headers = self.headers
+        self.client.get("/test/2")
+
+
+class WebsiteUser(HttpLocust):
+
+    host="http://www.example.com"
+    task_set = UserBehavior
+    # Wait times in milliseconds
+    min_wait=1000
+    max_wait=1000

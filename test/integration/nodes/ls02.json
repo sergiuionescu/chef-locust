@@ -1,0 +1,20 @@
+{
+  "id": "locust-slave02",
+  "chef_environment": "_default",
+  "automatic": {
+    "ipaddress": "192.168.88.4",
+     "hostname": "locust-slave02"
+  },
+  "hostname": "locust-slave02",
+  "normal": {
+    "locustio": {
+      "node_type": "slave",
+      "cluster_name": "default"
+    },
+    "tags": []
+  },
+  "run_list": [
+  "recipe[hartfordfive-locustio]"
+]
+
+}
