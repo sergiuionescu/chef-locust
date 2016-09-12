@@ -108,7 +108,14 @@ action :create do
     action :create
   end
 
-  if node_type == 'slave' && master_ip == nil
+
+  if ['master','slave'].include?(node_type)
+    if Chef::Config[:solo]
+      fail NotImplementedError, 'This recipe uses search.'
+    end
+  end
+
+  if node_type == 'slave' && master_ip.nil?
     query = "recipe:#{discovery_recipe.sub('::','\\:\\:')} AND chef_environment:#{node.chef_environment} AND locustio_cluster_name:#{cluster_name} AND locustio_node_type:master"
     nodes = search('node', query)
     if nodes.empty?

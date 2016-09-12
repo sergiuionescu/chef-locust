@@ -5,7 +5,7 @@ default['locustio']['pip_packages'] = {
 }
 
 default['locustio']['node_type'] = 'standalone'
-default['locustio']['master_ip'] = '127.0.0.1'
+default['locustio']['master_ip'] = nil
 default['locustio']['report_to_datadog'] = false
 default['locustio']['test_file'] = 'virtual_user.py'
 default['locustio']['test_file_cookbook'] = 'locustio'
