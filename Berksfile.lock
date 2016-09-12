@@ -12,7 +12,7 @@ GRAPH
   compat_resource (12.10.6)
   firewall (2.5.2)
     chef-sugar (>= 0.0.0)
-  locustio (1.0.0)
+  locustio (1.0.1)
     apt (~> 2.6.1)
     aws (~> 3.3.3)
     firewall (~> 2.5.2)

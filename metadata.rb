@@ -6,7 +6,7 @@ description       'Installs/Configures locust'
 long_description  'Installs/Configures locust'
 issues_url        'https://github.com/hartfordfive/chef-locust/issues'
 source_url        'https://github.com/hartfordfive/chef-locust'
-version           '1.0.0'
+version           '1.0.1'
 
 depends 'poise-python',   '~> 1.2.1'
 depends 'apt',            '~> 2.6.1'
