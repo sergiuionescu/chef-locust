@@ -35,7 +35,7 @@ action :create do
   include_recipe 'apt::default'
   include_recipe 'runit'
 
-  ['g++','python-zmq'].each do |p|
+  node['locustio']['platform_packages'].each do |p|
     package p
   end
 
@@ -79,6 +79,12 @@ action :create do
       group 'root'
     end
   end
+
+  link '/usr/bin/locust' do
+      to '/opt/rh/python27/root/usr/bin/locust'
+      not_if 'which locust'
+    end
+
 
   chef_gem 'httparty' do
     action :install
@@ -296,7 +302,7 @@ action :delete do
     action :run
   end
 
-  ['g++','python-zmq'].each do |p|
+  node['locustio']['platform_packages'].each do |p|
     package p do
       action :remove
     end

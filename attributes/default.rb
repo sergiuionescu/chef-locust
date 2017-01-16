@@ -4,6 +4,14 @@ default['locustio']['pip_packages'] = {
   'pyzmq' => '14.0.1'
 }
 
+default['locustio']['platform_packages'] =
+  case node['platform']
+    when 'centos'
+      %w(gcc-c++)
+    else
+      %w(g++)
+    end
+
 default['locustio']['node_type'] = 'standalone'
 default['locustio']['master_ip'] = nil
 default['locustio']['report_to_datadog'] = false
@@ -29,3 +37,4 @@ default['locustio']['s3_aws_secret_access_key'] = nil
 default['locustio']['s3_file_path'] = nil
 default['locustio']['s3_region'] = 'us-east-1'
 default['locustio']['enable_firewall'] = false
+default['locustio']['firewall_access_rules'] = {}
